@@ -1,0 +1,63 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // ===============================================================
+    // Assumed Data Model
+    // ===============================================================
+    // Settings: { name, subtitle, estd, address, phone1, phone2, facebookUrl, logoUrl }
+    // Notice: { text, date, isNew, createdAt }
+    // Stat: { label, value, order }
+    // Staff: { name, role, contact, type }
+    // Admission: { studentName, dob, department, type, fatherName, mobile, address, createdAt }
+    // ===============================================================
+
+    // Helper Functions
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isAdmin() {
+      return isAuthenticated() && 
+        (get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin' ||
+         request.auth.token.email == "tangibulislam02@gmail.com");
+    }
+
+    // Settings
+    match /settings/main {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // Notices
+    match /notices/{noticeId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // Stats
+    match /stats/{statId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // Staff
+    match /staff/{staffId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // Admissions
+    match /admissions/{admissionId} {
+      allow create: if true;
+      allow read, update, delete: if isAdmin();
+    }
+
+    // Users (for roles)
+    match /users/{userId} {
+      allow read: if isAuthenticated() && (request.auth.uid == userId || isAdmin());
+      allow write: if isAdmin();
+    }
+  }
+}

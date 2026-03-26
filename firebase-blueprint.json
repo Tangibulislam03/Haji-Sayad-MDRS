@@ -1,0 +1,92 @@
+{
+  "entities": {
+    "Settings": {
+      "title": "Settings",
+      "description": "General website settings",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "subtitle": { "type": "string" },
+        "estd": { "type": "string" },
+        "address": { "type": "string" },
+        "phone1": { "type": "string" },
+        "phone2": { "type": "string" },
+        "facebookUrl": { "type": "string" },
+        "logoUrl": { "type": "string" }
+      },
+      "required": ["name"]
+    },
+    "Notice": {
+      "title": "Notice",
+      "description": "Madrasah notices",
+      "type": "object",
+      "properties": {
+        "text": { "type": "string" },
+        "date": { "type": "string" },
+        "isNew": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["text", "date"]
+    },
+    "Stat": {
+      "title": "Stat",
+      "description": "Madrasah statistics",
+      "type": "object",
+      "properties": {
+        "label": { "type": "string" },
+        "value": { "type": "string" },
+        "order": { "type": "integer" }
+      },
+      "required": ["label", "value"]
+    },
+    "Staff": {
+      "title": "Staff",
+      "description": "Teachers and staff",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "role": { "type": "string" },
+        "contact": { "type": "string" },
+        "type": { "type": "string", "enum": ["committee", "teacher"] }
+      },
+      "required": ["name", "role"]
+    },
+    "Admission": {
+      "title": "Admission",
+      "description": "Student admission applications",
+      "type": "object",
+      "properties": {
+        "studentName": { "type": "string" },
+        "dob": { "type": "string" },
+        "department": { "type": "string" },
+        "type": { "type": "string" },
+        "fatherName": { "type": "string" },
+        "mobile": { "type": "string" },
+        "address": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      }
+    }
+  },
+  "firestore": {
+    "/settings/main": {
+      "schema": "Settings",
+      "description": "Main website settings"
+    },
+    "/notices": {
+      "schema": "Notice",
+      "description": "Collection of notices"
+    },
+    "/stats": {
+      "schema": "Stat",
+      "description": "Collection of statistics"
+    },
+    "/staff": {
+      "schema": "Staff",
+      "description": "Collection of staff and committee members"
+    },
+    "/admissions": {
+      "schema": "Admission",
+      "description": "Collection of admission applications"
+    }
+  }
+}

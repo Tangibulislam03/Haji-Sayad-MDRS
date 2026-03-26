@@ -1,0 +1,76 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Noto Sans Bengali", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Noto Serif Bengali", "Georgia", serif;
+  --font-arabic: "Amiri", serif;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+Bengali:wght@400;600;700&family=Noto+Sans+Bengali:wght@300;400;600&family=Amiri:wght@400;700&display=swap');
+
+:root {
+  --green: #1a5c38;
+  --green-light: #2d8653;
+  --green-pale: #e8f5ee;
+  --gold: #c9a227;
+  --gold-light: #f0d97a;
+  --white: #fff;
+  --text: #1a1a1a;
+  --muted: #555;
+  --bg: #f7f9f7;
+  --border: #cde0d6;
+  --shadow: 0 4px 24px rgba(26, 92, 56, 0.10);
+}
+
+body {
+  font-family: var(--font-sans);
+  background: var(--bg);
+  color: var(--text);
+}
+
+.header-bg {
+  background: linear-gradient(135deg, #0d3d22, #1a5c38 60%, #2d8653);
+  position: relative;
+  overflow: hidden;
+}
+
+.header-bg::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+}
+
+.marquee-bar {
+  background: var(--gold);
+  color: #fff;
+  font-size: 0.86rem;
+  padding: 8px 0;
+  font-weight: 600;
+  overflow: hidden;
+}
+
+.marquee-inner {
+  display: flex;
+  animation: marquee 28s linear infinite;
+  white-space: nowrap;
+}
+
+@keyframes marquee {
+  0% { transform: translateX(0) }
+  100% { transform: translateX(-50%) }
+}
+
+.btn-donate {
+  background: linear-gradient(135deg, var(--gold), #e6b422);
+  color: #fff;
+  font-weight: 700;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 4px 18px rgba(201, 162, 39, 0.5);
+  animation: pulse-donate 2.5s ease-in-out infinite;
+}
+
+@keyframes pulse-donate {
+  0%, 100% { box-shadow: 0 4px 18px rgba(201, 162, 39, 0.5); }
+  50% { box-shadow: 0 4px 28px rgba(201, 162, 39, 0.85), 0 0 0 6px rgba(201, 162, 39, 0.15); }
+}
