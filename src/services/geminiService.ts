@@ -1,9 +1,9 @@
 import { GoogleGenAI } from "@google/genai";
 
-const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
-
 export async function getChatResponse(message: string, madrasahInfo: string) {
-  const model = ai.models.generateContent({
+  const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+  
+  const response = await ai.models.generateContent({
     model: "gemini-3-flash-preview",
     contents: message,
     config: {
@@ -13,10 +13,10 @@ export async function getChatResponse(message: string, madrasahInfo: string) {
       ${madrasahInfo}
       
       If you don't know the answer, politely ask the user to contact the Madrasah directly at 01822-326895 or 01783-861610.
-      Always respond in Bengali unless the user asks in English. Be polite and respectful.`,
+      Always respond in the language the user uses (Bengali, English, or Arabic). 
+      Be polite, respectful, and helpful. Use Islamic greetings where appropriate (e.g., Assalamu Alaikum).`,
     },
   });
 
-  const response = await model;
   return response.text;
 }

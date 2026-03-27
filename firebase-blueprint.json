@@ -12,7 +12,13 @@
         "phone1": { "type": "string" },
         "phone2": { "type": "string" },
         "facebookUrl": { "type": "string" },
-        "logoUrl": { "type": "string" }
+        "logoUrl": { "type": "string" },
+        "aboutText": { "type": "string" },
+        "academicNazeraText": { "type": "string" },
+        "academicHifzText": { "type": "string" },
+        "otherResidentialText": { "type": "string" },
+        "otherDocumentsText": { "type": "string" },
+        "otherSpecialText": { "type": "string" }
       },
       "required": ["name"]
     },

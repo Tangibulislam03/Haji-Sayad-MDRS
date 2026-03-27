@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { MessageCircle, X, Send } from 'lucide-react';
+import { MessageCircle, X, Send, Facebook } from 'lucide-react';
 import { getChatResponse } from '../services/geminiService';
 import { cn } from '../lib/utils';
 import { motion, AnimatePresence } from 'motion/react';
@@ -12,20 +12,35 @@ interface Message {
 
 interface ChatbotProps {
   madrasahInfo: string;
+  settings: {
+    facebookUrl: string;
+    phone1: string;
+  };
 }
 
-export default function Chatbot({ madrasahInfo }: ChatbotProps) {
+const bnToEn = (str: string) => {
+  const bn = ['০', '১', '২', '৩', '৪', '৫', '৬', '৭', '৮', '৯'];
+  const en = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+  return str.split('').map(c => {
+    const i = bn.indexOf(c);
+    return i !== -1 ? en[i] : c;
+  }).join('').replace(/[^0-9]/g, '');
+};
+
+export default function Chatbot({ madrasahInfo, settings }: ChatbotProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [input, setInput] = useState('');
   const [messages, setMessages] = useState<Message[]>([
     {
-      text: 'আসসালামু আলাইকুম! 🌙 হাজ্বী ছৈয়দ আহমদ (রহ:) মাদ্রাসায় স্বাগতম। আমি কীভাবে সাহায্য করতে পারি?',
+      text: 'আসসালামু আলাইকুম! 🌙 হাজ্বী ছৈয়দ আহমদ (রহ:) মাদ্রাসায় স্বাগতম। আমি কীভাবে সাহায্য করতে পারি? (Assalamu Alaikum! Welcome to Haji Sayed Ahmad (Rh.) Madrasah. How can I help you? | السلام عليكم! مرحبًا بكم في مدرسة الحاج سيد أحمد. كيف يمكنني مساعدتك؟)',
       isBot: true,
       time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
     },
   ]);
   const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  const whatsappLink = `https://wa.me/88${bnToEn(settings.phone1)}`;
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -51,7 +66,7 @@ export default function Chatbot({ madrasahInfo }: ChatbotProps) {
     try {
       const botResponse = await getChatResponse(input, madrasahInfo);
       const botMsg = {
-        text: botResponse || 'দুঃখিত, আমি বুঝতে পারিনি। অনুগ্রহ করে ০১৮২২-৩২৬৮৯৫ নম্বরে যোগাযোগ করুন।',
+        text: botResponse || 'দুঃখিত, আমি বুঝতে পারিনি। অনুগ্রহ করে সরাসরি যোগাযোগ করুন।',
         isBot: true,
         time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
       };
@@ -78,7 +93,7 @@ export default function Chatbot({ madrasahInfo }: ChatbotProps) {
             initial={{ opacity: 0, scale: 0.9, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: 20 }}
-            className="w-[320px] sm:w-[360px] bg-white rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[500px] border border-green-pale"
+            className="w-[320px] sm:w-[360px] bg-white rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[550px] border border-green-pale"
           >
             {/* Header */}
             <div className="bg-gradient-to-r from-[#1a5c38] to-[#2d8653] p-4 text-white flex items-center justify-between">
@@ -99,8 +114,28 @@ export default function Chatbot({ madrasahInfo }: ChatbotProps) {
               </button>
             </div>
 
+            {/* Social Shortcuts */}
+            <div className="bg-green-pale/30 p-2 flex gap-2 border-b border-border">
+              <a 
+                href={settings.facebookUrl} 
+                target="_blank" 
+                rel="noreferrer"
+                className="flex-1 flex items-center justify-center gap-2 bg-[#1877F2] text-white py-1.5 rounded-lg text-[10px] font-bold hover:opacity-90 transition-opacity"
+              >
+                <Facebook size={12} /> Facebook
+              </a>
+              <a 
+                href={whatsappLink} 
+                target="_blank" 
+                rel="noreferrer"
+                className="flex-1 flex items-center justify-center gap-2 bg-[#25D366] text-white py-1.5 rounded-lg text-[10px] font-bold hover:opacity-90 transition-opacity"
+              >
+                <MessageCircle size={12} /> WhatsApp
+              </a>
+            </div>
+
             {/* Messages */}
-            <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-[#f9fbf9] min-h-[300px]">
+            <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-[#f9fbf9] min-h-[250px]">
               {messages.map((msg, i) => (
                 <div key={i} className={cn("flex flex-col max-w-[85%]", msg.isBot ? "self-start" : "self-end")}>
                   <div className={cn(
